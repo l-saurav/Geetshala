@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Geetshala{% endblock %}
+
+{% block content %}
+    <h2>List of Songs</h2>
+
+    {% if songs %}
+        <ul>
+            {% for song in songs %}
+                <li>
+                    <a href="{% url 'songs:song_detail' song.id %}">
+                        {{ song.title }}
+                    </a>
+                    <span>by {{ song.artist }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No songs are available.</p>
+    {% endif %}
+{% endblock %}
