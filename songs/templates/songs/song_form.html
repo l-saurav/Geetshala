@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Song{% endblock %}
+
+{% block content %}
+    <h2>Add New Song Details</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Save Song</button>
+    </form>
+
+    <hr>
+
+    <a href="{% url 'songs:song_list' %}">Back to Song List</a>
+{% endblock %}

@@ -21,4 +21,8 @@
     {% else %}
         <p>No songs are available.</p>
     {% endif %}
+
+    <hr>
+
+    <a href="{% url 'songs:create_song' %}">Add New Song Details</a>
 {% endblock %}

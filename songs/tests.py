@@ -58,3 +58,28 @@ class SongViewTests(TestCase):
         response = self.client.get(reverse('songs:song_detail', args=[9999]))
 
         self.assertEqual(response.status_code, 404)
+
+    def test_create_song_form_renders(self):
+        response = self.client.get(reverse('songs:create_song'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Add New Song Details')
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_create_song_saves_valid_submission_and_redirects(self):
+        response = self.client.post(
+            reverse('songs:create_song'),
+            {
+                'title': 'New song',
+                'lyrics': 'New lyrics',
+                'release_date_year': '2026',
+                'release_date_month': '9',
+                'release_date_day': '29',
+                'is_published': 'on',
+            },
+        )
+
+        self.assertRedirects(response, reverse('songs:song_list'))
+        self.assertTrue(
+            Song.objects.filter(title='New song', lyrics='New lyrics').exists()
+        )
