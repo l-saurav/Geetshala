@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{ song.title }} - Geetshala{% endblock %}
+
+{% block content %}
+    <article>
+        <h2>{{ song.title }}</h2>
+        {% if song.release_date %}
+            <p>Released: {{ song.release_date }}</p>
+        {% endif %}
+        <p>{{ song.lyrics|linebreaks }}</p>
+    </article>
+{% endblock %}

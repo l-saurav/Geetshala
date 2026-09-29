@@ -8,6 +8,9 @@ template inheritance, and custom 404 handling.
 
 - Python
 - Django
+- MySQL
+- mysqlclient
+- python-dotenv
 
 The project uses the virtual environment in the parent directory:
 
@@ -30,7 +33,28 @@ If the virtual environment has not been created yet, run these commands from
 ```powershell
 python -m venv myenv
 .\myenv\Scripts\Activate.ps1
-python -m pip install django
+python -m pip install -r .\geetshala\requirements.txt
+```
+
+Create a MySQL database and a dedicated user (do not use MySQL's `root` user
+from Django):
+
+```sql
+CREATE DATABASE geetshala;
+CREATE USER 'djangouser'@'localhost' IDENTIFIED BY 'a-password-you-choose';
+GRANT ALL PRIVILEGES ON geetshala.* TO 'djangouser'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Copy `.env.example` to `.env` next to `manage.py` and fill in the password.
+Leave `DEBUG=True` for local development so Django's development server serves
+the built-in admin CSS and JavaScript. Set `DEBUG=False` in production and
+serve collected static files from a production web server. The `.env` file is
+ignored by Git; never commit it.
+
+```powershell
+Copy-Item .env.example .env
+git check-ignore -v .env
 ```
 
 Apply the Django migrations:
@@ -53,6 +77,21 @@ python manage.py runserver
 
 Open the site at <http://127.0.0.1:8000/>.
 
+## Manage songs in the admin
+
+Open <http://127.0.0.1:8000/admin/> and sign in with a superuser. Select
+**Songs** to use Django's generated forms:
+
+- **Add song** creates a row with the title, lyrics, optional release date, and
+  publication status.
+- Selecting a song opens its update form.
+- Select one or more songs and choose **Delete selected songs** to remove them.
+- Use the search box and publication/date filters to find songs.
+
+Only songs with **is published** enabled appear on `/songs/`. The detail link
+for each published song reads its title, release date, and lyrics from the same
+database row.
+
 ## Routes
 
 | URL | Purpose |
@@ -62,8 +101,9 @@ Open the site at <http://127.0.0.1:8000/>.
 | `/songs/1/` | Details for song 1 |
 | `/admin/` | Django administration |
 
-The current song list uses sample data in `songs/views.py`; songs are not yet
-stored in a database model.
+The song list is backed by the `songs_song` table. It shows published songs,
+newest release dates first, and the detail route returns a 404 for an unknown
+song.
 
 ## Templates
 

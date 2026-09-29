@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Home - Geetshala{% endblock %}
+{% block title %}Songs - Geetshala{% endblock %}
 
 {% block content %}
     <h2>List of Songs</h2>
@@ -12,7 +12,9 @@
                     <a href="{% url 'songs:song_detail' song.id %}">
                         {{ song.title }}
                     </a>
-                    <span>by {{ song.artist }}</span>
+                    {% if song.release_date %}
+                        <span>({{ song.release_date }})</span>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

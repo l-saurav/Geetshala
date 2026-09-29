@@ -6,3 +6,6 @@ class Song(models.Model):
     lyrics = models.TextField()
     release_date = models.DateField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
